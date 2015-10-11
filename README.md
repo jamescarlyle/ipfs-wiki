@@ -1,18 +1,13 @@
 # ipfs-wiki
 
-This is a minimal effort to promote the read/write web on IPFS, but I have plenty of plans for how to extend it.
+This is a minimum viable web application to explore the read/write web on IPFS. There are many directions to take this but please fork or raise an issue if you'd like to see a particular change.
 
-The html + js files need to be served to the browser, either from a local filesystem, webserver or via an IPFS gateway. 
+The product is a Wiki that has no central server. All of the Wiki content is held on IPFS itself, and the Wiki html + Javascript files can also be held and served from IPFS via an IPFS gateway, or served to the browser from a local filesystem or local webserver.
 
-There is a current dependency
-on a local daemon listening on port 5001 (this is the default port for the IPFS daemon), in order to both fetch content and
-save changes. This means that the IPFS gateway used to serve the js also needs to use the same protocol, i.e. http 
-rather than https.
+There is a current dependency on the IPFS daemon which provides the ability to fetch and save Wiki content through the IPFS API. The Wiki app is preconfigured to talk to the API on localhost port 5001 (this is the default port for the IPFS API), in order to both fetch content and
+save changes. Browsers require that if an IPFS gateway is used to serve the Javascript, it needs to use the same protocol as the API, i.e. http rather than https. And CORS must be configured on the IPFS daemon, so that the API allows requests from Javascript hosted on other origins, if necessary.
 
-The wiki works by managing a context (behind the scenes, an IPFS Object with an array of Links mapping WikiNames to hashes),
-and the wiki pages themselves (behind the scences, an IPFS Object with Data but no Links). 
+The Wiki works by managing a "context" or "umbrella" for all the Wiki pages that link directly to each other. Behind the scenes, this is an IPFS Object with an array of Links mapping WikiNames to hashes.  The Wiki pages themselves are IPFS Objects with Data but no Links.
 
-When rendering a page, the context
-is loaded first, so that the hash of the page can be looked up, and then requested. When saving a page, the page is saved first,
-its hash obtained, then the parent context is updated with the new hash for the page. Then the context hash itself will change,
-so the URL path of the browser changes to reflect the new context.
+Technically speaking, when rendering a page, the context is loaded first, so that the hash of the page can be looked up, and then requested. When saving a page, the page is saved first,
+its hash obtained, then the parent context is updated with the new hash for the page. Then the context hash itself will change, so the URL path of the browser changes to reflect the new context.
