@@ -5,19 +5,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Interplanetary Wiki</title>
 </head>
-<body role="document" ng-controller="ApplicationCtrl">
+<body role="document" ng-controller="ApplicationCtrl as app">
 	<div class="container-fluid">
 		<div ng-view></div>
-	 </div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div>
+					<a href="#/contxt/"><span class="glyphicon glyphicon-th-list" /></span> page list</a> |
+					<a href="#/"><span class="glyphicon glyphicon-play" /></span> getting started</a> |
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 <script src="lib/angular.min.js"></script>
 <script src="lib/angular-sanitize.min.js"></script>
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-route.min.js"></script>
 <script src="js/app.js"></script>
-<script src="js/static.js"></script>
 <script src="js/filter.js"></script>
 <script src="js/resource.js"></script>
 <script src="js/storage.js"></script>
+<script src="js/context.js"></script>
 <script src="js/item.js"></script>
 </html>

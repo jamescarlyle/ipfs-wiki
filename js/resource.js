@@ -1,7 +1,7 @@
-angular.module('resource', ['ngResource', 'static'])
+angular.module('resource', ['ngResource', 'app'])
 // service for Items
-.factory('Item', ['$http', '$resource', 'GATEWAY_API_URL', function($http, $resource, GATEWAY_API_URL) {
-	var Item = $resource(GATEWAY_API_URL + 'get/:hash', {hash:'@hash'}, {
+.factory('Item', ['$http', '$resource', 'HostSvc', function($http, $resource, HostSvc) {
+	var Item = $resource(HostSvc.getHostUrl() + 'get/:hash', {hash:'@hash'}, {
 		get: { method: 'GET', cache: true },
 		save: {
 			method: 'POST',
@@ -11,7 +11,7 @@ angular.module('resource', ['ngResource', 'static'])
 				+ angular.toJson(data)
 				+ '\n\n--a831rwxi1a3gzaorw1w2z49dlsor--';
         },
-			url: GATEWAY_API_URL + 'put/'
+			url: HostSvc.getHostUrl() + 'put/'
 		}
 	});
 	return Item;

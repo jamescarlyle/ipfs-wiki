@@ -2,7 +2,38 @@
 <h1><span class="glyphicon glyphicon-play" /></span> What is the Interplanetary Wiki?</h1>
 <div class="panel panel-primary">
 	<div class="panel-body">
-	<p class="lead">Interplanetary Wiki allows you to create a set of personal Wiki pages that link to each other.</p>
-	<p>Interplanetary Wiki pages are stored on IPFS, the Interplanetary Filesystem.</p>
+		<p class="lead">Interplanetary Wiki allows you to create a set of Wiki
+			pages that link to each other.</p>
+		<p>Interplanetary Wiki pages are stored on <a href="http://ipfs.io">IPFS, the Interplanetary Filesystem</a>.</p>
+		<p>It is built using just IPFS and Javascript - the simplest possible thing that could work.
+			&quot;Wiki&quot; means &quot;quick&quot; in Hawaiian and the Wiki goal is that it is quick to edit the web.</p>
+		<p class="lead">Start your Wiki by following these steps:</p>
+		<ol>
+			<li>Enter some text in the sandbox below.</li>
+			<li>Link to a new page that you wish to create by typing its names using 2 or more words joined together and with the first letter capitalised, like HomePage or ToDoList. This will automatically create a link.</li>
+			<li>Click on the link, and a page editor will be presented in a brand new Context. The Context is
+				the "umbrella" for all of the Wiki pages created. Any Wiki page can link to any other in
+				the same context by simply adding text containing the name of the target page in special WikiName format.
+			<li>After you have finished editing the page, click on the Save button and the page will be saved to the IPFS network.</li>
+		</ol>
+		<p class="lead">Sandbox</p>
+		<p><textarea class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
+		ng-model="sandbox" rows="3" placeholder="Start typing in the sandbox - try creating a first page by typing a name like HomePage and then clicking on the link in the preview area below"></textarea></p>
+		<p class="lead">Preview</p>
+		<p><div class="well" ng-bind-html="sandbox | markdown : null"></div>
+	</div>
+	<div class="panel-body">
+		<p>The Wiki engine retrieves and stores updated content using an IPFS Gateway. The easiest
+			way of getting started is to run a IPFS node locally, but a different gateway
+			host and port may be configured.</p>
+		<form name="app.form" role="form" ng-submit="app.setHost()">
+			<div class="form-group" ng-class="{'has-error': app.form.appHost.$invalid && !app.form.appHost.$pristine}">
+    		<label for="appHost">Gateway host name and port</label>
+				<input type="url" class="form-control" id="appHost" name="appHost" ng-model="app.host" required
+				placeholder="Gateway host name and port" pattern="https?:\/\/([A-Za-z0-9\-]+\.?)+:\d{1,5}"/>
+				<span ng-show="app.form.appHost.$invalid && !app.form.appHost.$pristine" class="help-block">Enter a valid protocol, host name and port</span>
+			</div>
+			<input type="submit" class="btn btn-primary" value="update" ng-disabled="app.form.$invalid"/>
+		</form>
 	</div>
 </div>

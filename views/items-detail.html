@@ -1,17 +1,14 @@
 <!-- single item -->
-<h1>
-	IPFS Wiki : <span>{{itemName}}</span>
-</h1>
-<p>context: {{contextHash}}</p>
-<p>item: {{itemHash}}</p>
+<h1>{{itemDetail.itemName}}</h1>
 <div class="panel panel-default" >
 	<div class="panel-heading clearfix">
+		<div class="pull-left">IPFS context: <a href="#/{{itemDetail.contextHash}}"><b>{{itemDetail.contextHash}}</b></a> item: <b>{{itemDetail.itemHash}}</b></div>
 		<div class="pull-right">
-			<button ng-show="editing" type="button" class="btn btn-warning" ng-click="editing=!editing;saveItem()">save</button>
-			<button ng-hide="editing" class="btn btn-primary" ng-click="editing=!editing">edit  <span class="glyphicon glyphicon-pencil"/> </button>
+			<button ng-show="itemDetail.editing" type="button" class="btn btn-warning" ng-click="itemDetail.editing=!itemDetail.editing;itemDetail.saveItem()">save</button>
+			<button ng-hide="itemDetail.editing" class="btn btn-primary" ng-click="itemDetail.editing=!itemDetail.editing">edit <span class="glyphicon glyphicon-pencil"/> </button>
 		</div>
 	</div>
-	<div ng-hide="editing" class="panel-body" ng-bind-html="content"></div>
-	<textarea ng-show="editing" class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
-	ng-model="item.Data" rows="20" placeholder="start typing item text here"></textarea>
+	<div ng-hide="itemDetail.editing" class="panel-body" ng-bind-html="itemDetail.content"></div>
+	<textarea ng-show="itemDetail.editing" class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
+	ng-model="itemDetail.item.Data" rows="20" placeholder="start typing item text here"></textarea>
 </div>
