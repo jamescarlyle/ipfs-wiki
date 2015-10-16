@@ -1,0 +1,9 @@
+li.item {
+    display: block;
+}
+
+li.item:before {
+    content: "\e022";
+    font-family: 'Glyphicons Halflings';
+    color: #666;
+}

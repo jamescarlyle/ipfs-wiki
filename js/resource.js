@@ -1,6 +1,23 @@
 angular.module('resource', ['ngResource', 'app'])
 // service for Items
 .factory('Item', ['$http', '$resource', 'HostSvc', function($http, $resource, HostSvc) {
+	/*
+	Item is an Object in IPFS terms
+	For a context, the Item stores the following
+	{
+		"Data": ...name of context,
+		"Links": [
+			{"Name": ...page name, "Hash": ...hash of page}
+		]
+	}
+	For a page, the Item stores the following
+	{
+		"Data": ...content of page in markdown,
+		"Links": [
+			{"Name": ...datestamp of previous version, "Hash": ...hash of previous context}
+		]
+	}
+	*/
 	var Item = $resource(HostSvc.getHostUrl() + 'get/:hash', {hash:'@hash'}, {
 		get: { method: 'GET', cache: true },
 		save: {

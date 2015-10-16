@@ -1,17 +1,17 @@
 <!-- single item -->
-<h1><span class="glyphicon glyphicon-th-list" /></span> Wiki Page List</h1>
-<div class="panel panel-default" >
+<h1><span class="glyphicon glyphicon-th-list" /></span> Wiki Home</h1>
+<div class="panel panel-default">
 	<div class="panel-heading">
 		IPFS context:
-		<b>{{context.contextHash}}</b>
+		<b>{{contextCtrl.contextHash}}</b>
 	</div>
 	<div class="panel-body">
 		<p>
-			This is a list of Wiki pages within this context:
+			This is a list of all the pages within this Wiki:
 		</p>
 		<ol>
-			<li ng-repeat="(name, hash) in context.mapper">
-				<a href="#/{{context.contextHash}}/{{name}}">{{name}}</a>
+			<li class="item" ng-repeat="(name, hash) in contextCtrl.context.links">
+				<a href="#/{{contextCtrl.contextHash}}/{{name}}">{{name}}</a>
 			</li>
 		</ol>
 	</div>

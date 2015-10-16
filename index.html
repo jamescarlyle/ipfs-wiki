@@ -2,17 +2,18 @@
 <html ng-app="app">
 <head>
 	<link rel="stylesheet" href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="css/theme.css" rel="stylesheet" media="screen">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Interplanetary Wiki</title>
 </head>
-<body role="document" ng-controller="ApplicationCtrl as app">
+<body role="document" ng-controller="AppCtrl as app">
 	<div class="container-fluid">
 		<div ng-view></div>
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div>
-					<a href="#/contxt/"><span class="glyphicon glyphicon-th-list" /></span> page list</a> |
-					<a href="#/"><span class="glyphicon glyphicon-play" /></span> getting started</a> |
+					<a href="#/{{app.contextHash}}/"><span class="glyphicon glyphicon-th-list" /></span> wiki home</a> |
+					<a href="#/"><span class="glyphicon glyphicon-play" /></span> getting started</a>
 				</div>
 			</div>
 		</div>

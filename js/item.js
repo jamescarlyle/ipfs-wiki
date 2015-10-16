@@ -1,29 +1,39 @@
 angular.module('item', ['context', 'storage'])
-.controller('ItemDetailCtrl', ['$scope', '$routeParams', '$filter', '$location', 'ContextSvc', 'StorageSvc', function($scope, $routeParams, $filter, $location, ContextSvc, StorageSvc) {
-	var itemDetail = this;
-	itemDetail.loadItem = function() {
-		itemDetail.item = {};
+.controller('ItemCtrl', ['$scope', '$routeParams', '$location', 'ContextSvc', 'StorageSvc', function($scope, $routeParams, $location, ContextSvc, StorageSvc) {
+	var itemCtrl = this;
+	itemCtrl.loadItem = function() {
+		itemCtrl.itemName = $routeParams.itemName;
 		// fetch the item content using the name from the URL fragment
-		ContextSvc.getMapper($routeParams.contextHash)
-		.then(function(mapper) {
-			itemDetail.itemHash = mapper[$routeParams.itemName];
-			return StorageSvc.retrieve(itemDetail.itemHash);
-		})
-		.then(function(item) {
-			itemDetail.content = $filter('markdown')(item.Data, $routeParams.contextHash);
-			itemDetail.item = item;
-		});
-		itemDetail.itemName = $routeParams.itemName;
-		itemDetail.contextHash = $routeParams.contextHash;
+		if ($routeParams.contextHash == 'undefined') {
+			StorageSvc.retrieve(null)
+			.then(function(item) {
+				itemCtrl.item = item;
+				itemCtrl.editing = true;
+			})
+		} else {
+			ContextSvc.getContext($routeParams.contextHash)
+			.then(function(mapper) {
+				itemCtrl.itemHash = mapper.links[$routeParams.itemName];
+				return StorageSvc.retrieve(itemCtrl.itemHash);
+			})
+			.then(function(item) {
+				itemCtrl.editing = !item.Data;
+				itemCtrl.content = item.Data;
+				itemCtrl.item = item;
+			});
+		}
 	};
-	itemDetail.saveItem = function() {
-		StorageSvc.store(itemDetail.item, itemDetail.contextHash, itemDetail.itemHash, itemDetail.itemName)
-		.then(function(contextResponse) {
-			ContextSvc.resetMapper();
-			$location.path('/' + contextResponse.Hash + '/' + itemDetail.itemName);
-		});
+	itemCtrl.saveItem = function(contextHash) {
+		if (itemCtrl.content != itemCtrl.item.Data) {
+			StorageSvc.storeItemInContext(itemCtrl.item, contextHash, itemCtrl.itemHash, itemCtrl.itemName)
+			.then(function(contextResponse) {
+				// only reload if a new context was returned
+				ContextSvc.resetMapper();
+				$location.path('/' + contextResponse.Hash + '/' + itemCtrl.itemName);
+			});
+		}
 	};
 	// retain this structure (separately defined and called method) as easier to test
-	itemDetail.loadItem();
+	itemCtrl.loadItem();
 }])
 ;

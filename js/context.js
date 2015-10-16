@@ -1,37 +1,40 @@
 angular.module('context', ['storage'])
 .service('ContextSvc', ['$q', 'StorageSvc', function($q, StorageSvc) {
-	var mapper;
-	this.getMapper = function(contextHash) {
+	var context;
+	var contextHash;
+	this.getContext = function(contextHash) {
 		var deferred = $q.defer();
-		if (!mapper) {
-			mapper = {};
+		if (!context || context.contextHash != contextHash) {
+			// need to reset the context
+			context = {contextHash: contextHash, links:{}};
 			StorageSvc.retrieve(contextHash)
-			.then(function(context) {
-				context.Links.forEach(function(element, index, array) {
-					mapper[element.Name] = element.Hash;
+			.then(function(item) {
+				// convert array of links to object attributes
+				item.Links.forEach(function(element, index, array) {
+					context.links[element.Name] = element.Hash;
 				});
-				deferred.resolve(mapper);
+				deferred.resolve(context);
 			});
 		} else {
-			deferred.resolve(mapper);
+			deferred.resolve(context);
 		};
 		return deferred.promise;
 	};
-	this.resetMapper = function() {
-		mapper = null;
+	this.resetContext = function() {
+		context = null;
 	};
 }])
 .controller('ContextCtrl', ['$routeParams', '$filter', '$location', 'ContextSvc', 'StorageSvc', function($routeParams, $filter, $location, ContextSvc, StorageSvc) {
-	var context = this;
-	context.loadItems = function() {
+	var contextCtrl = this;
+	contextCtrl.loadItems = function() {
 		// fetch the items using the context
-		ContextSvc.getMapper($routeParams.contextHash)
-		.then(function(mapper) {
-			context.mapper = mapper;
+		ContextSvc.getContext($routeParams.contextHash)
+		.then(function(context) {
+			contextCtrl.context = context;
 		});
-		context.contextHash = $routeParams.contextHash;
+		contextCtrl.contextHash = $routeParams.contextHash;
 	};
 	// retain this structure (separately defined and called method) as easier to test
-	context.loadItems();
+	contextCtrl.loadItems();
 }])
 ;

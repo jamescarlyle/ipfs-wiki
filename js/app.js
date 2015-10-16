@@ -11,12 +11,12 @@ var app = angular.module('app', [
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
 	when('/:contextHash/:itemName', {
-		templateUrl: 'views/items-detail.html',
-		controller: 'ItemDetailCtrl as itemDetail'
+		templateUrl: 'views/item.html',
+		controller: 'ItemCtrl as itemCtrl'
 	}).
 	when('/:contextHash', {
 		templateUrl: 'views/context.html',
-		controller: 'ContextCtrl as context'
+		controller: 'ContextCtrl as contextCtrl'
 	}).
 	when('/', {
 		templateUrl: 'views/getting-started.html'
@@ -33,11 +33,31 @@ var app = angular.module('app', [
 		return GATEWAY_API_HOST + GATEWAY_API_URL;
 	}
 }])
-.controller('ApplicationCtrl', function($scope, HostSvc, GATEWAY_API_HOST) {
+.controller('AppCtrl', ['$scope', '$routeParams', '$location', 'HostSvc', 'StorageSvc', 'GATEWAY_API_HOST', function($scope, $routeParams, $location, HostSvc, StorageSvc, GATEWAY_API_HOST) {
 	var app = this;
+	app.contextHash;
 	app.host = GATEWAY_API_HOST;
 	app.setHost = function () {
 		HostSvc.bindHost(app.host)
 	};
-})
+	app.createContext = function () {
+		// need to create a context
+		StorageSvc.retrieve()
+		.then(function (context) {
+			context.Data = app.contextName;
+			return StorageSvc.saveItem(context);
+		})
+		// store the context name
+		.then(function(context) {
+			// then redirect to page
+			$location.path('/' + context.Hash + '/' + app.itemName);
+		})
+	};
+	$scope.$on('$routeChangeSuccess', function() {
+		// store the contextHash at app level, every time it changes
+	  if ($routeParams.contextHash) {
+			app.contextHash = $routeParams.contextHash;
+		}
+	});
+}])
 ;

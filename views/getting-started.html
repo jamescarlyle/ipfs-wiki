@@ -1,39 +1,65 @@
 <!-- getting started page -->
-<h1><span class="glyphicon glyphicon-play" /></span> What is the Interplanetary Wiki?</h1>
+<h1><span class="glyphicon glyphicon-play" /></span> Getting started</h1>
 <div class="panel panel-primary">
 	<div class="panel-body">
-		<p class="lead">Interplanetary Wiki allows you to create a set of Wiki
-			pages that link to each other.</p>
-		<p>Interplanetary Wiki pages are stored on <a href="http://ipfs.io">IPFS, the Interplanetary Filesystem</a>.</p>
-		<p>It is built using just IPFS and Javascript - the simplest possible thing that could work.
-			&quot;Wiki&quot; means &quot;quick&quot; in Hawaiian and the Wiki goal is that it is quick to edit the web.</p>
-		<p class="lead">Start your Wiki by following these steps:</p>
-		<ol>
-			<li>Enter some text in the sandbox below.</li>
-			<li>Link to a new page that you wish to create by typing its names using 2 or more words joined together and with the first letter capitalised, like HomePage or ToDoList. This will automatically create a link.</li>
-			<li>Click on the link, and a page editor will be presented in a brand new Context. The Context is
-				the "umbrella" for all of the Wiki pages created. Any Wiki page can link to any other in
-				the same context by simply adding text containing the name of the target page in special WikiName format.
-			<li>After you have finished editing the page, click on the Save button and the page will be saved to the IPFS network.</li>
-		</ol>
-		<p class="lead">Sandbox</p>
-		<p><textarea class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
-		ng-model="sandbox" rows="3" placeholder="Start typing in the sandbox - try creating a first page by typing a name like HomePage and then clicking on the link in the preview area below"></textarea></p>
+		<h2>What is the Interplanetary Wiki?</h2>
+		<p class="lead">Interplanetary Wiki allows you to create a set of Wiki pages that easily be linked to each other.</p>
+		<p>Interplanetary Wiki pages are stored on <a href="https://ipfs.io">IPFS, the Interplanetary Filesystem</a>. This means that there is no central server, and any of the nodes in the IPFS network could store the pages and be used to retrieve them. The application is built using just IPFS and Javascript - the simplest possible thing that could work.	&quot;Wiki&quot; means &quot;quick&quot; in Hawaiian, and the Wiki goal is that it is quick to edit the web.
+		</p>
+		<p>Wiki pages are immutable - that means that each time a page is edited, a completely new copy of the page is saved. This is not a problem, since the old versions of the page will be deleted automatically unless they have been 'pinned'. It does mean that an auditable page history can be kept if necessary.</p>
+		<p class="lead">Let's get started!</p>
+		<p>The first step is to select a name for your Wiki and the first page.
+		</p>
+		<form class="form-inline" name="app.create" role="form" ng-submit="app.createContext()">
+			<div class="form-group" ng-class="{'has-error': app.create.contextName.$invalid}">
+		    <label for="contextName">Wiki name</label>
+		    <input type="text" class="form-control" id="contextName" name="contextName" ng-model="app.contextName" required placeholder="The name of your Wiki"/>
+		  </div>
+			<div class="form-group" ng-class="{'has-error': app.create.itemName.$invalid}">
+		    <label for="itemName">Page name</label>
+		    <input type="text" size="40" class="form-control" id="itemName" name="itemName" ng-model="app.itemName" required placeholder="The name of your FirstPage - e.g. ToDoList" pattern="(?:[A-Z][a-z]+){2,}"/>
+		  </div>
+		  <button type="submit" class="btn btn-primary"  ng-disabled="app.create.$invalid">start</button>
+			<span ng-show="app.create.itemName.$invalid" class="help-block">The PageName must be 2 or more WordsJoinedTogether</span>
+		</form>
+		<h2>Sandbox</h2>
+		<p>Practice editing Wiki text using the sandbox. See how <b>WikiNames</b> automatically turn into links to new or existing pages:</p>
+		<p>
+			<textarea class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
+		ng-model="sandbox" rows="3" placeholder="This is a Wiki page. Type some text or markdown here and preview it below. To link to a new page, type 'NewPage', click on the link automatically created, and then start editing it.">
+			</textarea>
+		</p>
 		<p class="lead">Preview</p>
-		<p><div class="well" ng-bind-html="sandbox | markdown : null"></div>
+		<div class="well" ng-bind-html="sandbox | markdown : app.contextHash"></div>
+		<h2>Syntax</h2>
+		<p>
+			The Wiki supports a subset of markdown syntax, currently limited to the following
+		</p>
+		<pre>
+# Heading 1-6
+* Unordered lists
+1. Ordered lists
+WikiNames (automatically create links to other Wiki pages)
+[markdown links](http://somewhere.else.com)
+Paragraphs (separated by 2 new lines)
+New lines (separated by 1 new line)</pre>
+		<p>More complete markdown syntax support will be added in future.</p>
 	</div>
+</div>
+<div class="panel panel-primary">
 	<div class="panel-body">
-		<p>The Wiki engine retrieves and stores updated content using an IPFS Gateway. The easiest
-			way of getting started is to run a IPFS node locally, but a different gateway
-			host and port may be configured.</p>
-		<form name="app.form" role="form" ng-submit="app.setHost()">
-			<div class="form-group" ng-class="{'has-error': app.form.appHost.$invalid && !app.form.appHost.$pristine}">
-    		<label for="appHost">Gateway host name and port</label>
+		<h2>Configuration</h2>
+		<p>Each Wiki is a collection of neighbouring pages, easily connected by links that are recognised in the text by the special formatting of 2 or more joined up words, like <b>TitlePage</b>. Each page is identified by its name, and the collection as a whole is called the 'context'.</p>
+		<p>The current Wiki context is <b>{{(app.contextHash ? app.contextHash : 'not set')}}</b></p>
+		<p>The Wiki engine retrieves and stores updated content using an IPFS Gateway. The easiest way of getting started is to run a IPFS node locally, but a different gateway host and port may be configured.</p>
+		<form name="app.config" role="form" ng-submit="app.setHost()">
+			<div class="form-group" ng-class="{'has-error': app.config.appHost.$invalid && !app.config.appHost.$pristine}">
+				<label for="appHost">Gateway host name and port</label>
 				<input type="url" class="form-control" id="appHost" name="appHost" ng-model="app.host" required
 				placeholder="Gateway host name and port" pattern="https?:\/\/([A-Za-z0-9\-]+\.?)+:\d{1,5}"/>
-				<span ng-show="app.form.appHost.$invalid && !app.form.appHost.$pristine" class="help-block">Enter a valid protocol, host name and port</span>
+				<span ng-show="app.config.appHost.$invalid && !app.config.appHost.$pristine" class="help-block">Enter a valid protocol, host name and port</span>
 			</div>
-			<input type="submit" class="btn btn-primary" value="update" ng-disabled="app.form.$invalid"/>
+			<input type="submit" class="btn btn-primary" value="update" ng-disabled="app.config.$invalid"/>
 		</form>
 	</div>
 </div>
