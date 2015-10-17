@@ -20,9 +20,7 @@ angular.module('storage', ['resource'])
 		// save the returned hashes generated for use in later scope
 		var itemPut;
 		// create a link for the previous version
-		if (contextHash != 'undefined') {
-			item.Links.push({"Name": new Date().toUTCString(), "Hash": contextHash});
-		}
+		item.Links.push({"Name": new Date().toUTCString(), "Hash": contextHash});
 		var findItemInLinks = function(element, index, array) {
 			return element.Hash == this;
 		};
@@ -31,7 +29,7 @@ angular.module('storage', ['resource'])
 			// store the item just saved
 			itemPut = itemResponse;
 			// fetch the parent context
-			return (contextHash == 'undefined' ? retrieve() : Item.get({hash: contextHash}).$promise);
+			return Item.get({hash: contextHash}).$promise;
 		})
 		.then(function(context) {
 			// create a link

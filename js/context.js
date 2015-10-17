@@ -1,7 +1,6 @@
 angular.module('context', ['storage'])
 .service('ContextSvc', ['$q', 'StorageSvc', function($q, StorageSvc) {
 	var context;
-	var contextHash;
 	this.getContext = function(contextHash) {
 		var deferred = $q.defer();
 		if (!context || context.contextHash != contextHash) {
@@ -9,6 +8,7 @@ angular.module('context', ['storage'])
 			context = {contextHash: contextHash, links:{}};
 			StorageSvc.retrieve(contextHash)
 			.then(function(item) {
+				context.name = item.Data;
 				// convert array of links to object attributes
 				item.Links.forEach(function(element, index, array) {
 					context.links[element.Name] = element.Hash;
@@ -26,6 +26,9 @@ angular.module('context', ['storage'])
 }])
 .controller('ContextCtrl', ['$routeParams', '$filter', '$location', 'ContextSvc', 'StorageSvc', function($routeParams, $filter, $location, ContextSvc, StorageSvc) {
 	var contextCtrl = this;
+	contextCtrl.createItem = function() {
+		$location.path('/' + contextCtrl.context + '/' + contextCtrl.itemName);
+	}
 	contextCtrl.loadItems = function() {
 		// fetch the items using the context
 		ContextSvc.getContext($routeParams.contextHash)

@@ -1,12 +1,13 @@
 <!-- single item -->
-<h1><span class="glyphicon glyphicon-th-list" /></span> Wiki Home</h1>
+<h1><span class="glyphicon glyphicon-th-list" /></span> {{contextCtrl.context.name}}</h1>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		IPFS context:
 		<b>{{contextCtrl.contextHash}}</b>
 	</div>
 	<div class="panel-body">
-		<p>
+		// TODO
+		<p ng-if="contextCtrl.context.links.length > 0">
 			This is a list of all the pages within this Wiki:
 		</p>
 		<ol>
@@ -14,5 +15,16 @@
 				<a href="#/{{contextCtrl.contextHash}}/{{name}}">{{name}}</a>
 			</li>
 		</ol>
+		<p class="lead">
+			TODO Create a new page:
+		</p>
+		<form class="form-inline" name="contextCtrl.create" role="form" ng-submit="contextCtrl.createItem()">
+			<div class="form-group" ng-class="{'has-error': contextCtrl.create.itemName.$invalid}">
+		    <label for="itemName">Page name</label>
+		    <input type="text" size="40" class="form-control" id="itemName" name="itemName" ng-model="contextCtrl.itemName" required placeholder="The name of your FirstPage - e.g. ToDoList" pattern="(?:[A-Z][a-z]+){2,}"/>
+		  </div>
+		  <button type="submit" class="btn btn-primary"  ng-disabled="contextCtrl.create.$invalid">start</button>
+			<span ng-show="contextCtrl.create.itemName.$invalid" class="help-block">The PageName must be 2 or more WordsJoinedTogether</span>
+		</form>
 	</div>
 </div>
