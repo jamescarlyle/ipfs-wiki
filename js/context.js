@@ -1,27 +1,25 @@
 angular.module('context', ['storage'])
 .service('ContextSvc', ['$q', 'StorageSvc', function($q, StorageSvc) {
-	var context;
-	this.getContext = function(contextHash) {
-		var deferred = $q.defer();
-		if (!context || context.contextHash != contextHash) {
-			// need to reset the context
-			context = {contextHash: contextHash, links:{}};
-			StorageSvc.retrieve(contextHash)
-			.then(function(item) {
-				context.name = item.Data;
-				// convert array of links to object attributes
-				item.Links.forEach(function(element, index, array) {
-					context.links[element.Name] = element.Hash;
-				});
-				deferred.resolve(context);
-			});
-		} else {
-			deferred.resolve(context);
-		};
+	var deferred;
+	this.getContext = function() {
 		return deferred.promise;
 	};
+	this.setContext = function(contextHash) {
+		deferred = $q.defer();
+		// need to reset the context
+		// context = {contextHash: contextHash, links:{}};
+		StorageSvc.retrieve(contextHash)
+		.then(function(item) {
+			context.name = item.Data;
+			// convert array of links to object attributes
+			item.Links.forEach(function(element, index, array) {
+				context.links[element.Name] = element.Hash;
+			});
+			deferred.resolve(context);
+		});
+	};
 	this.resetContext = function() {
-		context = null;
+		deferred = null;
 	};
 }])
 .controller('ContextCtrl', ['$routeParams', '$filter', '$location', 'ContextSvc', 'StorageSvc', function($routeParams, $filter, $location, ContextSvc, StorageSvc) {
