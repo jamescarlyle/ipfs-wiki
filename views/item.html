@@ -11,7 +11,7 @@
 			<button ng-hide="itemCtrl.editing" class="btn btn-primary" ng-click="itemCtrl.editing=!itemCtrl.editing">edit <span class="glyphicon glyphicon-pencil"/> </button>
 		</div>
 	</div>
-	<div ng-hide="itemCtrl.editing" class="panel-body" ng-bind-html="itemCtrl.item.Data | markdown : app.contextHash"></div>
+	<div ng-hide="itemCtrl.editing" class="panel-body" ng-bind-html="itemCtrl.item.Data | markdown : itemCtrl.context.hash"></div>
 	<textarea ng-show="itemCtrl.editing" class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
 	ng-model="itemCtrl.item.Data" rows="20" placeholder="start typing item text here"></textarea>
 </div>

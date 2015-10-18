@@ -1,5 +1,5 @@
 angular.module('item', ['context', 'storage'])
-.controller('ItemCtrl', ['$scope', '$routeParams', '$location', 'ContextSvc', 'StorageSvc', function($scope, $routeParams, $location, ContextSvc, StorageSvc) {
+.controller('ItemCtrl', ['$scope', '$routeParams', '$route', 'ContextSvc', 'StorageSvc', function($scope, $routeParams, $route, ContextSvc, StorageSvc) {
 	var itemCtrl = this;
 	itemCtrl.loadItem = function() {
 		itemCtrl.itemName = $routeParams.itemName;
@@ -12,7 +12,6 @@ angular.module('item', ['context', 'storage'])
 		})
 		.then(function(item) {
 			itemCtrl.editing = !item.Data;
-			itemCtrl.content = item.Data;
 			itemCtrl.item = item;
 		});
 	};
@@ -20,9 +19,8 @@ angular.module('item', ['context', 'storage'])
 		if (itemCtrl.content != itemCtrl.item.Data) {
 			StorageSvc.storeItemInContext(itemCtrl.item, contextHash, itemCtrl.itemHash, itemCtrl.itemName)
 			.then(function(contextResponse) {
-				// only reload if a new context was returned
-				ContextSvc.resetContext();
-				$location.path('/' + contextResponse.Hash + '/' + itemCtrl.itemName);
+				// reload including the new context that was returned
+				$route.updateParams({contextHash: contextResponse.Hash, itemName: itemCtrl.itemName});
 			});
 		}
 	};

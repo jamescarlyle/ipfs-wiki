@@ -3,7 +3,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		IPFS context:
-		<b>{{contextCtrl.contextHash}}</b>
+		<b>{{contextCtrl.context.hash}}</b>
 	</div>
 	<div class="panel-body">
 		// TODO
@@ -12,7 +12,7 @@
 		</p>
 		<ol>
 			<li class="item" ng-repeat="(name, hash) in contextCtrl.context.links">
-				<a href="#/{{contextCtrl.contextHash}}/{{name}}">{{name}}</a>
+				<a href="#/{{contextCtrl.context.hash}}/{{name}}">{{name}}</a>
 			</li>
 		</ol>
 		<p class="lead">

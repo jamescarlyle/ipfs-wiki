@@ -33,14 +33,20 @@ var app = angular.module('app', [
 		return GATEWAY_API_HOST + GATEWAY_API_URL;
 	}
 }])
-.controller('AppCtrl', ['$scope', '$routeParams', '$location', 'HostSvc', 'StorageSvc', 'GATEWAY_API_HOST', function($scope, $routeParams, $location, HostSvc, StorageSvc, GATEWAY_API_HOST) {
+.controller('AppCtrl', ['$scope', '$routeParams', '$location', 'HostSvc', 'StorageSvc', 'ContextSvc', 'GATEWAY_API_HOST', function($scope, $routeParams, $location, HostSvc, StorageSvc, ContextSvc, GATEWAY_API_HOST) {
 	var app = this;
-	app.contextHash;
+	var contextHash;
 	app.host = GATEWAY_API_HOST;
 	app.setHost = function () {
 		HostSvc.bindHost(app.host)
 	};
-	app.createContext = function () {
+	app.getContext = function() {
+		ContextSvc.getContext()
+		.then(function(context) {
+			return context;
+		});
+	};
+	app.createContext = function() {
 		// need to create a context
 		StorageSvc.retrieve()
 		.then(function (context) {
@@ -49,19 +55,13 @@ var app = angular.module('app', [
 		})
 		// store the context name
 		.then(function(context) {
-			// then redirect to page
+			// then redirect to page (can't use updateParams, since no params in this route)
 			$location.path('/' + context.Hash + '/' + app.itemName);
 		})
 	};
-	$scope.$on('$routeChangeSuccess', 'ContextSvc', function(ContextSvc) {
+	$scope.$on('$routeChangeSuccess', function() {
 		// store the contextHash at app level, every time it changes
-	  if ($routeParams.contextHash) {
-			ContextSvc.setContext($routeParams.contextHash);
-			ContextSvc.getContext()
-			.then(context) {
-				app.contextHash = context;
-			};
-		}
+		app.contextHash = $routeParams.contextHash;
 	});
 }])
 ;
