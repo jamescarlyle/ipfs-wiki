@@ -61,7 +61,9 @@ var app = angular.module('app', [
 	};
 	$scope.$on('$routeChangeSuccess', function() {
 		// store the contextHash at app level, every time it changes
-		app.contextHash = $routeParams.contextHash;
+		if ($routeParams.contextHash) {
+			app.contextHash = $routeParams.contextHash;
+		}
 	});
 }])
 ;
