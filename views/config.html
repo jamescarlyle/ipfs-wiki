@@ -1,0 +1,21 @@
+<div id="config" class="container-fluid content">
+	<h1><span class="glyphicon glyphicon-cog" /></span> Configuration</h1>
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<p>Each Wiki is a collection of neighbouring pages, easily connected by links that are recognised in the text by the special formatting of 2 or more joined up words, like <b>TitlePage</b>. Each page is identified by its name, and the collection as a whole is called the 'context'.</p>
+			<p>The current Wiki context is <b>{{(app.contextHash ? app.contextHash : 'not set')}}</b></p>
+			<p>The Wiki engine retrieves and stores updated content using an IPFS Gateway. The easiest way of getting started is to run a IPFS node locally, but a different gateway host and port may be configured.</p>
+      <p>The current gateway host is <b>{{(app.host ? app.host : 'not set')}}</b></p>
+			<form class="form-inline" name="app.config" role="form">
+				<div class="form-group" ng-class="{'has-error': app.config.appHost.$invalid && !app.config.appHost.$pristine}">
+					<label for="appHost">Gateway host name and port</label>
+					<input type="url" size="40" class="form-control" id="appHost" name="appHost" ng-model="app.update" required
+					placeholder="Gateway host name and port" pattern="https?:\/\/([A-Za-z0-9\-]+\.?)+:\d{1,5}"/>
+					<span ng-show="app.config.appHost.$invalid && !app.config.appHost.$pristine" class="help-block">Enter a valid protocol, host name and port</span>
+				</div>
+				<input type="button" class="btn btn-default" ng-click="app.resetHost()" value="reset" />
+        <input type="submit" class="btn btn-primary" ng-click="app.setHost()" value="update" ng-disabled="app.config.$invalid"/>
+  			</form>
+		</div>
+	</div>
+</div>
