@@ -1,5 +1,6 @@
 var app = angular.module('app', [
 	'ngRoute',
+	'ngAnimate',
 	'filter',
 	'resource',
 	'storage',
@@ -8,21 +9,25 @@ var app = angular.module('app', [
 .value('GATEWAY_API_HOST', 'http://localhost:5001')
 .constant('GATEWAY_API_URL', '/api/v0/object/')
 // configure routes
-.config(['$routeProvider', function($routeProvider) {
+.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+	$locationProvider.hashPrefix('!');
 	$routeProvider.
-	when('/:contextHash/:itemName', {
+	when('/context/:contextHash/item/:itemName', {
 		templateUrl: 'views/item.html',
 		controller: 'ItemCtrl as itemCtrl'
 	}).
-	when('/:contextHash', {
+	when('/context/:contextHash', {
 		templateUrl: 'views/context.html',
 		controller: 'ContextCtrl as contextCtrl'
 	}).
-	when('/', {
-		templateUrl: 'views/getting-started.html'
+	when('/home', {
+		templateUrl: 'views/home.html'
+	}).
+	when('/config', {
+		templateUrl: 'views/config.html'
 	}).
 	otherwise({
-		redirectTo: '/'
+		redirectTo: '/home'
 	});
 }])
 .service('HostSvc', ['GATEWAY_API_HOST', 'GATEWAY_API_URL', function(GATEWAY_API_HOST, GATEWAY_API_URL) {
@@ -33,12 +38,17 @@ var app = angular.module('app', [
 		return GATEWAY_API_HOST + GATEWAY_API_URL;
 	}
 }])
-.controller('AppCtrl', ['$scope', '$routeParams', '$location', 'HostSvc', 'StorageSvc', 'ContextSvc', 'GATEWAY_API_HOST', function($scope, $routeParams, $location, HostSvc, StorageSvc, ContextSvc, GATEWAY_API_HOST) {
+.controller('AppCtrl', ['$scope', '$routeParams', '$location', '$document', '$window', 'HostSvc', 'StorageSvc', 'ContextSvc', 'GATEWAY_API_HOST',
+function($scope, $routeParams, $location, $document, $window, HostSvc, StorageSvc, ContextSvc, GATEWAY_API_HOST) {
 	var app = this;
 	var contextHash;
 	app.host = GATEWAY_API_HOST;
-	app.setHost = function () {
-		HostSvc.bindHost(app.host)
+	app.setHost = function() {
+		app.host = angular.copy(app.update);
+		HostSvc.bindHost(app.host);
+	};
+	app.resetHost = function() {
+		app.update = angular.copy(app.host);
 	};
 	app.getContext = function() {
 		ContextSvc.getContext()
@@ -56,7 +66,7 @@ var app = angular.module('app', [
 		// store the context name
 		.then(function(context) {
 			// then redirect to page (can't use updateParams, since no params in this route)
-			$location.path('/' + context.Hash + '/' + app.itemName);
+			$location.path('/context/' + context.Hash + '/item/' + app.itemName);
 		})
 	};
 	$scope.$on('$routeChangeSuccess', function() {
@@ -65,5 +75,18 @@ var app = angular.module('app', [
 			app.contextHash = $routeParams.contextHash;
 		}
 	});
+	app.scrollSmooth = function(target) {
+		var body = $document[0].getElementById('view-area');
+		var targetOffset = $document[0].getElementById(target.substr(1)).offsetTop;
+		var currentPosition = body.scrollTop;
+		body.classList.add('in-transition');
+		body.style.transform = "translate(0, -" + (targetOffset - currentPosition) + "px)";
+		$window.setTimeout(function () {
+			body.classList.remove('in-transition');
+			body.style.cssText = "";
+			$window.scrollTo(0, targetOffset);
+		}, 1000);
+		event.preventDefault();
+	}
 }])
 ;

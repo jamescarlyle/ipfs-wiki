@@ -29,7 +29,7 @@ angular.module('context', ['storage'])
 	var contextCtrl = this;
 	contextCtrl.createItem = function() {
 		// already have the context, so just load page for new item in context
-		$location.path('/' + contextCtrl.context.hash + '/' + contextCtrl.itemName);
+		$location.path('/context/' + contextCtrl.context.hash + '/item/' + contextCtrl.itemName);
 	}
 	contextCtrl.loadItems = function() {
 		// fetch the items within this context

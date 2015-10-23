@@ -1,25 +1,38 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-	<link rel="stylesheet" href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link rel="stylesheet" href="css/theme.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="css/theme.css" media="screen">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="James Carlyle">
 	<title>Interplanetary Wiki</title>
 </head>
 <body role="document" ng-controller="AppCtrl as app">
+	<nav class="navbar navbar-inverse navbar-fixed-top" id="navigation-bar">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li><a href="#!/home#cover">Interplanetary Wiki</a></li>
+				<li><a href="#!/home#start"><span class="glyphicon glyphicon-play" /></span> Start</a></li>
+				<li><a href="#!/config"><span class="glyphicon glyphicon-cog" /></span> Configure</a></li>
+				<li ng-show="app.contextHash"><a href="#!/context/{{app.contextHash}}/"><span class="glyphicon glyphicon-th-list" /></span> Pages</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div id="view-area" ng-view></div>
 	<div class="container-fluid">
-		<div ng-view></div>
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<div>
-					<a href="#/{{app.contextHash}}/"><span class="glyphicon glyphicon-th-list" /></span> wiki home</a> |
-					<a href="#/"><span class="glyphicon glyphicon-play" /></span> getting started</a>
-				</div>
+				<p class="text-center">
+					<a href="https://github.com/jamescarlyle/ipfs-wiki">fork &amp; report issues</a> |
+					licensed under GPL |
+					<a href="http://james.carlyle.space">James Carlyle</a>
+				</p>
 			</div>
 		</div>
 	</div>
 </body>
 <script src="lib/angular.min.js"></script>
+<script src="lib/angular-animate.min.js"></script>
 <script src="lib/angular-sanitize.min.js"></script>
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-route.min.js"></script>

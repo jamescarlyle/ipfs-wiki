@@ -3,7 +3,43 @@ li.item {
 }
 
 li.item:before {
-    content: "\e022";
-    font-family: 'Glyphicons Halflings';
-    color: #666;
+  content: "\e022";
+  font-family: 'Glyphicons Halflings';
+  color: #666;
+}
+
+body {
+}
+
+body > div.in-transition {
+	transition: 1s ease all;
+}
+
+div.content {
+  padding-top: 40px;
+}
+
+div.cover {
+  color: #fff;
+  position: relative;
+  background: url("../images/cover.jpg") center center;
+  background-size: cover;
+  text-align: center;
+}
+
+div.cover > div.content {
+  padding-top: 20%;
+	min-height: 800px;
+}
+
+.ng-enter {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+  opacity:0;
+}
+
+.ng-enter.ng-enter-active {
+  opacity:1;
 }

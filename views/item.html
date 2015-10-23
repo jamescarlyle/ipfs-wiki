@@ -1,27 +1,32 @@
 <!-- single item -->
-<h1><span class="glyphicon glyphicon-file" /></span> {{itemCtrl.context.name}} / {{itemCtrl.itemName}}</h1>
-<div class="panel panel-default">
-	<div class="panel-heading clearfix">
-		<div class="pull-left">
-			Context: <a href="#/{{app.contextHash}}"><b>{{app.contextHash}}</b></a><br/>
-			Item: <b>{{itemCtrl.itemHash}}</b>
+<div id="item" class="container-fluid content">
+	<h1><span class="glyphicon glyphicon-file" /></span> {{itemCtrl.context.name}} / {{itemCtrl.itemName}}</h1>
+	<div class="panel panel-default">
+		<div class="panel-heading clearfix">
+			<div ng-hide="itemCtrl.editing" class="pull-left">
+				Context: <a href="#!/context/{{app.contextHash}}"><b>{{app.contextHash}}</b></a><br/>
+				Item: <b>{{itemCtrl.itemHash}}</b>
+			</div>
+			<div ng-show="itemCtrl.editing" class="pull-left">
+				New page links can be created by typing <b>WikiName</b> format in the textbox below.
+			</div>
+			<div class="pull-right">
+				<button ng-show="itemCtrl.editing" type="button" class="btn btn-warning" ng-click="itemCtrl.editing=!itemCtrl.editing;itemCtrl.saveItem(app.contextHash)">save</button>
+				<button ng-hide="itemCtrl.editing" class="btn btn-primary" ng-click="itemCtrl.editing=!itemCtrl.editing">edit <span class="glyphicon glyphicon-pencil"/> </button>
+			</div>
 		</div>
-		<div class="pull-right">
-			<button ng-show="itemCtrl.editing" type="button" class="btn btn-warning" ng-click="itemCtrl.editing=!itemCtrl.editing;itemCtrl.saveItem(app.contextHash)">save</button>
-			<button ng-hide="itemCtrl.editing" class="btn btn-primary" ng-click="itemCtrl.editing=!itemCtrl.editing">edit <span class="glyphicon glyphicon-pencil"/> </button>
+		<div ng-hide="itemCtrl.editing" class="panel-body" ng-bind-html="itemCtrl.item.Data | markdown : itemCtrl.context"></div>
+		<textarea ng-show="itemCtrl.editing" class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
+		ng-model="itemCtrl.item.Data" rows="20" placeholder="start typing item text here"></textarea>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Page history
 		</div>
-	</div>
-	<div ng-hide="itemCtrl.editing" class="panel-body" ng-bind-html="itemCtrl.item.Data | markdown : itemCtrl.context.hash"></div>
-	<textarea ng-show="itemCtrl.editing" class="form-control" style="border-style:none;background-color:#fcf8e3;padding:15px;"
-	ng-model="itemCtrl.item.Data" rows="20" placeholder="start typing item text here"></textarea>
-</div>
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Page history
-	</div>
-	<div class="panel-body">
-		<ol>
-			<li ng-repeat="link in itemCtrl.item.Links"><a href="#/{{link.Hash}}/{{itemCtrl.itemName}}">{{link.Name}}</a> </li>
-		</ol>
+		<div class="panel-body">
+			<ol>
+				<li ng-repeat="link in itemCtrl.item.Links"><a href="#!/context/{{link.Hash}}/item/{{itemCtrl.itemName}}">{{link.Name}}</a> </li>
+			</ol>
+		</div>
 	</div>
 </div>

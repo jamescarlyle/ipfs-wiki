@@ -20,12 +20,14 @@ angular.module('filter', ['ngSanitize'])
 		br: /\n/g,
 	};
 
-	return function(data, contextHash) {
+	return function(data, context) {
 		var count = 0;
+		context = context || {hash: '', links:{}};
 		return (data || '')
 		// parse for wiki links
-		.replace(regex.wiki, function(wikiName) {
-			return '<a href="#/'+ contextHash + '/' + wikiName + '">' + wikiName + '</a>';
+		.replace(regex.wiki, function(itemName) {
+			return '<a href="#!/context/'+ context.hash + '/item/' + itemName + '">' + itemName +
+			' <span class="glyphicon glyphicon-' + (context.links[itemName] ? 'link' : 'plus') + '"></span></a>';
 		})
 		.replace(regex.a1, function(href) {
 			return '<a href="'+ href + '">' + href + '</a>';
