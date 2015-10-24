@@ -17,6 +17,8 @@ New lines (separated by 1 new line)
 ```
 More complete markdown syntax support will be added in future.
 
+## Getting started
+
 In order to use the Wiki, simply download all the files in this repository using the following command
 ```
 $ git clone https://github.com/jamescarlyle/ipfs-wiki.git
@@ -37,20 +39,22 @@ Then load the index.html page. At this stage, it should be possible to create a 
 http://localhost/index.html
 ```
 
+## Technical Details
+
 The page can also be loaded via IPFS itself (note that the hash will change):
 ```
-https://ipfs.io/ipfs/QmdDbLyNKCwtBVFhEVQfdBTCnEWmWRJGnm93qa3kzBjVym/#!/home#start
+https://ipfs.io/ipfs/QmNhZhUfz4oJeGMq8T9v4eNxTVok9jDx2ab3QRELrutKE3/#!/home#start
 ```
 
 But then if the local daemon is specified, the following error will be seen
 ```
-Mixed Content: The page at 'https://ipfs.io/ipfs/Qm....../#!/home#start' was loaded over HTTPS, but requested an insecure XMLHttpRequest endpoint 'http://localhost:5001/api/v0/object/put/'. This request has been blocked; the content must be served over HTTPS.
+Mixed Content: The page at 'https://ipfs.io/ipfs/QmNhZhUfz4oJeGMq8T9v4eNxTVok9jDx2ab3QRELrutKE3/#!/home#start' was loaded over HTTPS, but requested an insecure XMLHttpRequest endpoint 'http://localhost:5001/api/v0/object/put/'. This request has been blocked; the content must be served over HTTPS.
 ```
 There is a current dependency on the IPFS daemon which provides the ability to fetch and save Wiki content through the IPFS API. The Wiki app is preconfigured to talk to the API on localhost port 5001 (this is the default port for the IPFS API), in order to both fetch content and save changes. Browsers require that if an IPFS gateway is used to serve the Javascript, it needs to use the same protocol as the API, i.e. http rather than https.
 
 If you want to run the daemon and allow it to be writable by users of the Wiki who are not using the same host and port to serve the html and Javascript, then CORS must be configured on the IPFS daemon, so that the API will allow requests from Javascript hosted on other origins. See [Wikipedia on CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) for more. So if you serve the HTML and Javascript using the local IPFS daemon, thus:
 ```
-http://localhost:8080/ipfs/QmdDbLyNKCwtBVFhEVQfdBTCnEWmWRJGnm93qa3kzBjVym/
+http://localhost:8080/ipfs/QmNhZhUfz4oJeGMq8T9v4eNxTVok9jDx2ab3QRELrutKE3/
 ```
 
 then you will see the following error
