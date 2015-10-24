@@ -44,6 +44,7 @@
 	<div class="panel panel-primary">
 		<div class="panel-body">
 			<h2>Let's get started</h2>
+			<div class="alert alert-danger" role="alert">Note that a IPFS daemon is needed to create pages. See <a href="https://github.com/jamescarlyle/ipfs-wiki">the GitHub README</a> for details.</div>
 			<p class="lead">The first step is to select a name for your Wiki and the first page.</p>
 			<form class="form-inline" name="app.create" role="form" ng-submit="app.createContext()">
 				<div class="form-group" ng-class="{'has-error': app.create.contextName.$invalid && !app.create.contextName.$pristine}">
