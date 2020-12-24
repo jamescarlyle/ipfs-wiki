@@ -19,7 +19,7 @@ angular.module('resource', ['ngResource', 'app'])
 	}
 	*/
 	var Item = $resource(HostSvc.getHostUrl() + 'get/:hash', {hash:'@hash'}, {
-		get: { method: 'GET', cache: true },
+		get: { method: 'POST', cache: true },
 		save: {
 			method: 'POST',
 			headers: { 'Content-Type': 'multipart/form-data; boundary=a831rwxi1a3gzaorw1w2z49dlsor' },
