@@ -2,6 +2,8 @@
 
 **Note that this implementation has been superceded with a version called [WIKID](https://github.com/jamescarlyle/wikid), which does not require a separate IPFS daemon.**
 
+**This version is preserved for historical reasons.**
+
 This is a minimum viable web application to explore the read/write web on [IPFS](https://ipfs.io). There are many directions to take this but please fork or raise an issue if you'd like to see a particular change.
 
 The product is a Wiki that has no central server. All of the Wiki content is held on IPFS itself, and the Wiki html + Javascript files can also be held and served from IPFS via an IPFS gateway, or served to the browser from a local filesystem or local webserver.
